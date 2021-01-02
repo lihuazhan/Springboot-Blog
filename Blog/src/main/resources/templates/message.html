@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>留言板</title>
+</head>
+<body>
+<nav th:replace="fragment :: menu(3)"></nav>
+
+<div class=" message-container  animated slideInDown">
+    <div class="ui container">
+        <form action="/message/save" th:action="@{/message/save}" method="post" id="message_from" class="ui form">
+            <input type="hidden" name="blog.id">
+            <input type="hidden" name="parentComment.id" value="-1">
+            <div class="field">
+                <textarea name="content" required th:placeholder="${session.user}==null?'客官，请先登录哦！！！':'给博主和网友留点话呗...'"
+                          placeholder=""></textarea>
+            </div>
+            <div style="float: right;">
+                <div class="fields">
+
+                    <div class="field  m-margin-bottom-small m-mobile-wide">
+                        <button id="commentpost-btn" th:classappend="${session.user}==null?'hide':''" value=""
+                                class="ui teal button m-mobile-wide"><i
+                                class="edit icon"></i>发表留言
+                        </button>
+                        <a th:href="@{/user}" id="to_login"
+                           target="_blank"
+                           th:classappend="${session.user}==null?'':'hide'">我要登录
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>
+
+<div class="   animated slideInUp " style="max-width: 840px;margin: 100px auto">
+    <div class="ui container">
+        <div class="ui  attached segment">
+            <div>
+                <div class="ui threaded comments">
+                    <h3 class="ui dividing header">留言板</h3>
+                    <div class="comment" th:each="message : ${messages}">
+                        <a class="avatar">
+                            <img th:src="${message.getMsg_avatar()}"
+                                 src="http://img.duoziwang.com/2018/17/05272146700399.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author" th:text="${message.getNickName()}">Matt</a>
+                            <div class="metadata">
+
+                                <div class="ui mini basic teal left pointing label m-padded-mini"
+                                     th:classappend="${message.getAdmin()==0}?'hide'"
+                                     th:text="${message.getAdmin()==1}?'博主'">博主
+                                </div>
+                                <span class="date" th:text="${#dates.format(message.getCreate_time(), 'yyyy-MM-dd')}">Today at 5:42PM</span>
+                            </div>
+                            <div class="text" th:text="${message.getContent()}">
+                                博主测试功能中。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+                            </div>
+                            <div class="actions" th:classappend="${session.user}==null?'hide':''">
+                                <a class="reply">回复</a>
+                            </div>
+                            <div class="reply_input hide">
+                                <form method="post" th:action="@{/message/reply/save}" action="#">
+                                    <input type="text" name="mes_id" th:value="${message.getId()}"
+                                           style="display: none">
+                                    <textarea class="input_text" type=" text"
+                                              required
+                                              name="content"
+                                              th:placeholder="'回复 @'+${message.getNickName()}"
+                                              placeholder="回复@jacky："
+                                    ></textarea>
+                                    <input class="reply-button" type="submit" value="回复">
+                                </form>
+                            </div>
+                        </div>
+
+
+                        <div class="comments " th:classappend="${message.getReplies().size()==0}?'hide'"
+                             th:each="reply : ${message.getReplies()}">
+                            <div class="comment">
+                                <a class="avatar">
+                                    <img th:src="@{${reply.getAvatar()}}" src="../static/images/avatar.jpg">
+                                </a>
+                                <div class="content">
+                                    <a class="author" th:text="${reply.getNickName()}">jacky</a>
+                                    <div class="metadata">
+                                        <span class="date"
+                                              th:text="${#dates.format(reply.getCreate_time(), 'yyyy-MM-dd')}">Today at 5:42PM</span>
+                                    </div>
+                                    <div class="text">
+                                        <a href="#" th:classappend="${reply.getReply_name()==null}?'hide'"
+                                           th:text="'@'+${reply.getReply_name()}+'：'">@jacky</a> <span
+                                            th:text="${reply.getContent()}"><：测试回复功能</span>
+                                    </div>
+                                    <div class="actions" th:classappend="${session.user}==null?'hide':''">
+                                        <a class="reply">回复</a>
+                                    </div>
+                                    <div class="reply_input hide">
+                                        <form method="post" th:action="@{/message/reply/save}" action="#">
+                                            <input type="text" name="mes_id" th:value="${message.getId()}"
+                                                   style="display: none">
+                                            <input type="text" name="reply_name" th:value="${reply.getNickName()}"
+                                                   style="display: none">
+                                            <textarea class="input_text" type=" text"
+                                                      required
+                                                      name="content"
+                                                      th:placeholder="'回复 @'+${reply.getNickName()}"
+                                                      placeholder="回复@jacky："
+                                            ></textarea>
+                                            <input class="reply-button" type="submit" value="回复">
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span id="session_user" th:text="${session.user}==null?'':${session.user.getUsername()}"></span>
+<footer th:replace="fragment :: footer"></footer>
+<script>
+
+    if ($("#session_user").text() == '') {
+        $("#message_from textarea").prop("readonly", true)
+    }
+
+
+    $('.reply').click(function () {
+        $(".reply_input").addClass("hide");
+        $(this).parent().parent().find(".reply_input").removeClass("hide");
+    });
+
+
+</script>
+</body>
+</html>

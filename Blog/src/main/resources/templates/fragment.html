@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--每个页面的title不一样-->
+<head th:fragment="head(title)">
+    <link rel="shortcut icon"  th:href="@{/images/favicon.ico}" th:src="@{/images/favicon.ico}">
+    <meta charset="UTF-8">
+    <title th:replace="${title}">LiBlog</title>
+    <!--    过渡动画-->
+    <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <!--    代码高亮显示-->
+<!--    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">-->
+    <!--    页面排版-->
+    <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
+    <!--    图标-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+<!--    生成目录-->
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+    <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+    <script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+    <!--    平滑滚动-->
+    <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+    <!--    滚动监听-->
+    <script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+<!--    看板娘-->
+<!--    <script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>-->
+
+<!--    网易云-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <script src="http://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>
+
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+
+    <style>
+        .aplayer.aplayer-fixed .aplayer-body {
+            bottom: 15px;
+            left: 15px;
+        }
+
+    </style>
+</head>
+<body>
+<!--导航栏-->
+<!--menu(n)为了改变active选中的值-->
+<nav th:fragment="menu(n)" class="ui secondary attached segment m-padded-tb-mini m-shadow-small animated  " >
+    <div class="ui  ">
+        <div class="ui  secondary stackable menu middle aligned m-container-nav" >
+            <h2 class="ui pink header item " >LiBlog</h2>
+<!--            th:classappend="${n==1}?'active'"  传进来的值是1就这class后增加样式active-->
+            <a href="#"  th:href="@{/}" class="m-item item m-mobile-hide " th:classappend="${n==1}?'active'"><i class="  home icon"></i>首页</a>
+            <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2}?'active'"><i class="tags icon" ></i>标签</a>
+<!--            <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==3}?'active'"><i class="music icon"></i>音乐盒</a>-->
+            <a href="#" th:href="@{/message/allMessage}"class="m-item item m-mobile-hide" th:classappend="${n==3}?'active'"><i class="comments icon"></i>留言板</a>
+            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${n==4}?'active'"><i class="archive icon"></i>归档</a>
+            <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${n==5}?'active'"><i class="info icon"></i>关于</a>
+
+
+            <div class="  item m-mobile-hide" style="margin-left: 100px">
+                <form name="search" action="#" method="post" th:action="@{/search}" target="_blank">
+                <div class="ui icon  transparent input">
+                    <input type="text" placeholder="搜索..." name="query" th:value="${query}">
+                    <i class="search link icon" onclick="document.forms['search'].submit()"></i>
+                </div>
+                    </form>
+            </div>
+            <div class="right m-item m-mobile-hide menu" >
+                <a href="#" class="sign_in" th:classappend="${session.user}==null?'':'hide'" target="_blank" th:href="@{/user}">登录</a>
+                <a class="login" th:classappend="${session.user}==null?'':'hide'" target="_blank" th:href="@{/user/register}"href="#">注册</a>
+                <div class="ui dropdown  item" th:classappend="${session.user}==null?'hide':''">
+                    <div class="text">
+                        <!--            src="https://unsplash.it/100/100?image=1005"-->
+                        <img class="ui avatar image"   th:src="${session.user}!=null?${session.user.getAvatar()}:'https://unsplash.it/100/100?image=1005'"  src="https://unsplash.it/100/100?image=1005" >
+                        <span th:text="${session.user}==null?'':${session.user.getUsername()}">Izumi</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#"  class="item">个人中心</a>
+                        <a href="/user/logout"  class="item">注销</a>
+
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+                <i class="sidebar icon"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="two wide centered column">
+                <img src="./static/images/wechat.jpg" th:src="@{/images/weChat.jpg}" class="ui rounded image " style="width: 120px" alt="">
+            </div>
+            <div class="four wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">客栈信息</h4>
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <span id="htmer_time" style="color: orange"></span>
+
+                    </div>
+                    <div class="item">
+<!--                        客流量：-->
+                    </div>
+
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：2224984493@qq.com</a>
+                    <a href="#" class="item m-text-thin">QQ：2224984493</a>
+                </div>
+            </div>
+            <div class="seven wide column ">
+
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">临江仙·梦后楼台高锁</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">
+                    梦后楼台高锁，酒醒帘幕低垂。去年春恨却来时。落花人独立，微雨燕双飞。</p>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">
+                    记得小苹初见，两重心字罗衣。琵琶弦上说相思。当时明月在，曾照彩云归。</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-spaced m-text-thin ">  Copyright © 2020 李华湛 </p>
+        <p class="m-text-spaced m-text-thin m-opacity-mini">粤ICP备2020076993号-1</p>
+    </div>
+
+    <div class="aplayer" data-id="2900035985" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"  data-volume="0.6" ></div>
+    <div id="netEasy-music" style="z-index:9999" />
+
+
+
+    <script type="text/javascript">
+
+        // 悬停的时候下拉
+        $('.ui.dropdown').dropdown({
+            on: 'hover'
+        })
+
+        var browser = {
+            versions: function () {
+                var u = navigator.userAgent, app = navigator.appVersion;
+                return {     //移动终端浏览器版本信息
+                    trident: u.indexOf('Trident') > -1, //IE内核
+                    presto: u.indexOf('Presto') > -1, //opera内核
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                    iPad: u.indexOf('iPad') > -1, //是否iPad
+                    webApp: u.indexOf('Safari') == -1 //是否web应用程序，没有头部与底部
+                };
+            }(),
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        }
+        if(!browser.versions.mobile){ //非移动端，动态加载js和div
+            onload = function () {
+            };
+            var script1 = document.createElement('script');
+            script1.type = 'text/javascript';
+            script1.src = '\\js\\snow.js';
+
+            <!-- 天气预报 -->
+            WIDGET = {FID: 'EtgqPWMbdv'}
+            var script4 = document.createElement('script');
+            script4.type = 'text/javascript';
+            script4.src = 'https://apip.weatherdt.com/float/static/js/r.js?v=1111';
+
+            var script2 = document.createElement('script');
+            script2.type = 'text/javascript';
+            script2.src = '\\js\\click_show_text.js';
+
+            var script3 = document.createElement('script');
+            script3.type = 'text/javascript';
+            script3.color = '220,220,220';
+            script3.opacity = '0.7';//透明度
+            script3.zIndex = '-2';
+            script3.count = '200';
+            script3.src = '//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js';
+
+            /*live-2D*/
+            var script5 = document.createElement('script');
+            script5.type = 'text/javascript';
+            script5.src = '\\js\\autoload.js';
+
+            // $('body').append(script5);
+            // $('body').append(script1);
+            // $('body').append(script4);
+            $('body').append(script2);
+            $('body').append(script3);
+        }
+
+
+        function secondToDate(second) {
+            if (!second) {
+                return 0;
+            }
+            var time = new Array(0, 0, 0, 0, 0);
+            if (second >= 365 * 24 * 3600) {
+                time[0] = parseInt(second / (365 * 24 * 3600));
+                second %= 365 * 24 * 3600;
+            }
+            if (second >= 24 * 3600) {
+                time[1] = parseInt(second / (24 * 3600));
+                second %= 24 * 3600;
+            }
+            if (second >= 3600) {
+                time[2] = parseInt(second / 3600);
+                second %= 3600;
+            }
+            if (second >= 60) {
+                time[3] = parseInt(second / 60);
+                second %= 60;
+            }
+            if (second > 0) {
+                time[4] = second;
+            }
+            return time;
+        }
+        function setTime() {
+            /*此处为网站的创建时间*/
+            var create_time = Math.round(new Date(Date.UTC(2020, 07, 05, 18, 01, 01)).getTime() / 1000);
+            var timestamp = Math.round((new Date().getTime() + 8 * 60 * 60 * 1000) / 1000);
+            currentTime = secondToDate((timestamp - create_time));
+            currentTimeHtml = '本站已运行：' + currentTime[0] + '年' + currentTime[1] + '天'
+                + currentTime[2] + '时' + currentTime[3] + '分' + currentTime[4]
+                + '秒';
+            document.getElementById("htmer_time").innerHTML = currentTimeHtml;
+        }
+        setInterval(setTime, 1000);
+    </script>
+</footer>
+</body>
+</html>

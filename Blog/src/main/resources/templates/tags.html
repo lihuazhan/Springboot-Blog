@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>标签</title>
+</head>
+<body class="index-bg">
+<!--导航栏-->
+<nav th:replace="fragment :: menu(2)">
+
+</nav>
+
+
+
+<!--中间内容-->
+<div class="m-padded-tb-tiny m-margin-top-massive">
+<!--    ui container响应式布局-->
+    <div class="ui container">
+        <div class="ui stackable grid ">
+<!--            左边博客列表-->
+            <div class="eleven wide column animated slideInLeft">
+<!--                header-->
+                <div class="ui  top attached  segment ">
+<!--                    垂直居中middle aligned-->
+                        <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <h3 class="ui teal header">标签</h3>
+                        </div><!--                            right aligned靠右了-->
+                        <div class="column right aligned">
+                            共 <h3 class="ui orange header m-inline-block"th:text="${#arrays.length(tags)}">3</h3>个
+                        </div>
+                </div>
+
+             </div>
+                <div class="ui attached  segment  m-padded-lr " >
+                    <div class="ui labeled button m-margin-tb-tiny " th:classappend="${tag.id==activeTagId} ? 'pink'"  th:each="tag : ${tags}" >
+                        <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" th:classappend="${tag.id==activeTagId} ? 'pink'"  class="ui basic  button" th:text="${tag.name}">弹吉他</a>
+                        <div class="ui basic  left pointing label" th:classappend="${tag.id==activeTagId} ? 'pink'"  th:text="${#arrays.length(tag.blogs)}">19</div>
+                    </div>
+
+                </div>
+<!--                content-->
+                    <!--   vertical相邻加横线-->
+
+                <div class="ui padded  segment m-shadow" style="margin-bottom: 1em !important;" th:each="blog : ${pageInfo.list}">
+                    <!--        stackable可堆叠，适应手机mobile reversed图片放上面（两个column反转）-->
+                    <div class="ui  mobile reversed stackable grid" >
+                        <div class="ui five wide column">
+                            <a href="#" target="_blank">
+                                <img src="https://picsum.photos/seed/picsum/800/450" th:src="@{${blog.firstPicture}}" alt="" class="ui rounded image">
+                            </a>
+                            <a href="#"  class="ui label orange" style="position: absolute; right:1.5em; top: 1.5em !important;">原创</a>
+                        </div>
+                        <!--                            右，标题+摘录-->
+                        <div class="ui eleven wide column">
+                            <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank"><h3 class="ui header blog_detail"
+                                                                                                   th:text="${blog.title}">
+                                出师表</h3></a>
+                            <p class="m-text" th:text="|${blog.description}......|">北冥有鱼，其名为鲲。鲲之大，不知其几千里也；化而为鸟，其名为鹏。鹏之背，不知其几千里也；怒而飞，其翼若垂天之云。是鸟也，海运则将徙于南冥...</p>
+                            <!--                                因为有作者，日期等，又可以用grid-->
+                            <div class="ui grid">
+                                <div class="ui eleven wide column">
+                                    <div class="ui mini horizontal link list ">
+                                        <div class="item">
+                                            <img src="https://picsum.photos/id/1002/100/100" th:src="@{${blog.admin.avatar}}" alt="" class="ui avatar image">
+                                            <div class="content teal">
+                                                <a class="header" th:text="${blog.admin.username}">李华湛</a>
+                                            </div>
+                                        </div>
+                                        <div class="item" >
+                                                <span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">
+                                                <i class="calendar icon"></i>2020-8-1
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i><span style="margin-left: 3px !important;" th:text="${blog.views}"> 暂无浏览</span>
+                                        </div>
+                                        <div class="item">
+                                            <i class="heart  icon"></i><span style="margin-left: 3px !important;" th:text="${blog.like}"> 暂无点赞</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                                    标签,网格内容右对齐-->
+                                <div class="ui right aligned five wide column" th:each="tags : ${blog.tags}">
+                                    <a href="#" th:text="${tags.name}" target="_blank"  class="ui teal basic label " style="padding: 0.5em !important;">经典</a>
+                                    <!--                                        <a href="#" target="_blank"  class="ui teal basic label " style="padding: 0.5em !important;">古诗词</a>-->
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+<!--                footer分页-->
+                <div class="ui bottom attached segment center aligned">
+                    <div class="ui middle aligned  grid">
+                        <div class="left aligned seven wide column">
+                            <div class="item"><a class="ui mini teal basic button"
+                                                 th:classappend="${pageInfo.hasPreviousPage}?'':'hide'"
+                                                 th:href="@{/admin/tags(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1)}" >上一页</a></div>
+                        </div>
+                        <div class="two wide column">
+                            <span class="" th:text="${pageInfo.getPageNum()}">1</span> / <span th:text="${pageInfo.getPages()}">3</span>
+                        </div>
+                        <div class="right aligned seven wide column">
+                            <div class="item"><a class="ui mini teal basic button"
+                                                 th:classappend="${pageInfo.hasNextPage}?'':'hide'"
+                                                 th:href="@{/admin/tags(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages})}">下一页</a></div>
+                        </div>
+                    </div>
+
+                </div>
+        </div>
+
+<!--            右边的top-->
+            <div class="five wide column">
+<!--                表示多层segment嵌套-->
+
+                <div class="ui segments animated slideInRight">
+                    <div class="ui secondary segment m-padded-mini " >
+                        <h4 class="ui teal header ">
+                            <!--                            sort amount up-->
+                            热文推荐
+                        </h4>
+
+                    </div>
+
+                    <div class="ui  segment m-padded-tb-small" style="border: none" th:each="lankblogs,stat: ${lankBlogs}">
+                        <!--                        <div class="ui two column grid">-->
+                        <div class="column">
+                            <label href="" class="ui label " style="margin-right: 1.5em;"
+                                   th:classappend="${(stat.index+1)==1}?'red':(${(stat.index+1)==2}?'orange':(${(stat.index+1)==3}?'pink'))">
+                                <span th:text="${stat.index+1}">1</span>
+                            </label>
+                            <a href="#" th:href="@{/blog/{id}(id=${lankblogs.getId()})}" class="m-black m-text-thin lankBlog_detail" th:text="${lankblogs.getTitle()}">人间失格</a>
+                            <!--                            <div class="item " style="color: #FF69B4 ;float: right"><i class="fa fa-heart"></i> 2000</div>-->
+                        </div>
+
+                    </div>
+                </div>
+    </div>
+</div>
+</div>
+    <br>
+    <br>
+    <br>
+<!--脚部-->
+    <footer th:replace="fragment :: footer" ></footer>
+<script>
+   $(".menu.toggle").click(function () {
+        $(".m-item").toggleClass("m-mobile-hide");
+   })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.NoticeDao">
+    <select id="findAllNotice" resultType="notice">
+        select * from notice
+    </select>
+
+    <insert id="addNotices" parameterType="notice">
+        insert into notice(content) values(#{content})
+    </insert>
+
+    <delete id="deleteNotice" parameterType="int">
+        delete from notice where id=#{id}
+    </delete>
+
+</mapper>

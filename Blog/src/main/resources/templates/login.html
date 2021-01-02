@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment :: head(~{::title})">
+  <title>登录</title>
+</head>
+
+<body class="login-bg">
+
+<br>
+<br>
+<br>
+ <div class="m-container-small m-padded-tb-massive disabled" style="max-width: 30em !important;">
+   <div class="ur container">
+     <div class="ui middle aligned center aligned grid">
+       <div class="column">
+         <h2 class="ui teal image header">
+           <div class="content" >
+           Login
+           </div>
+         </h2>
+         <form class="ui large form" method="post" action="#" th:action="@{/user/login}">
+           <div class="ui  segment">
+             <div class="field">
+               <div class="ui left icon input">
+                 <i class="user icon"></i>
+                 <input type="text" name="username" placeholder="用户名">
+               </div>
+             </div>
+             <div class="field">
+               <div class="ui left icon input">
+                 <i class="lock icon"></i>
+                 <input type="password" name="password" placeholder="密码">
+               </div>
+             </div>
+             <button class="ui fluid large teal submit button">登 录</button>
+           </div>
+
+
+           <div id="errorMessage" style="display: none" th:text="${msg}">用户名和密码错误</div>
+
+         </form>
+
+       </div>
+     </div>
+   </div>
+ </div>
+
+
+<script>
+  $('.ui.form').form({
+    fields : {
+      username : {
+        identifier: 'username',
+        rules: [{
+          type : 'empty',
+          prompt: '请输入用户名'
+        }]
+      },
+      password : {
+        identifier: 'password',
+        rules: [{
+          type : 'empty',
+          prompt: '请输入密码'
+        }]
+      }
+    }
+  });
+
+  $(document).ready(function(){
+
+
+    if ( $('#errorMessage').text()!='')
+    {
+      alert($('#errorMessage').text())
+    }
+
+
+  })
+
+
+</script>
+
+</body>
+</html>

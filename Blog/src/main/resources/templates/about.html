@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的故事</title>
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" th:src="@{/images/favicon.ico}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+    <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="jquery.mCustomScrollbar.concat.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+
+        }
+        body {
+            background-color: rgba(241,243,244,.7);
+        }
+        li {
+            list-style: none;
+        }
+        .hide {
+            display: block;
+        }
+        .m-text {
+            /*大小*/
+         font-size: 16px;
+            /*字间距*/
+            letter-spacing: 1px !important;
+            /*行间距*/
+            line-height: 1.8;
+
+            font-family: 楷体;
+        }
+
+
+
+        .my-content {
+            width: 90%;
+            margin: 30px auto;
+
+        }
+
+        .my-container {
+            width: 90%;
+
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .my-container .my-content_left {
+            float: left;
+            width: 35%;
+            height: 100%;
+        }
+        .my-content_left .saying {
+            width: 90%;
+            position: relative;
+            /*height: 100px;*/
+            padding: 15px;
+            background: url("./images/greek-vase.png") no-repeat 0 0;
+            margin: 20px auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+
+        }
+
+        .my-content_left .my_saying {
+            background: url("./images/geometric-leaves.png") no-repeat 0 0;
+        }
+        .my-content_left .saying .author {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+        .my-container .my-content_right {
+            float: right;
+            margin-top: 20px;
+            width: 60%;
+
+            text-align: center;
+        }
+        .my-content_right .main_info p{
+                text-indent: 2em;
+            margin: 20px auto;
+        }
+        .my-content_right .hobby ul{
+            border-left: 4px #00B5AD solid;
+            text-align: left!important;
+
+        }
+        .my-content_right .hobby p {
+         text-indent: 0 !important;
+            margin-left: 20px;
+        }
+        .my-content_right .skill ul{
+            border-left: 4px #00B5AD solid;
+            text-align: left!important;
+        }
+        .my-content_right .skill p {
+            text-indent: 0 !important;
+            margin-left: 20px;
+        }
+        .my-container .my-content_right p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.8;
+            text-align: justify;
+            text-indent: 2em;
+        }
+
+        .my-container .my-content_right img {
+            width: 300px;
+            height: 250px;
+            border-radius: 5px;
+
+        }
+        .mood_my-container p {
+
+            margin-left: 20px;
+            font-family: 楷体;
+            font-size: 18px;
+
+        }
+        ._mCS_1 .mCSB_scrollTools .mCSB_dragger_bar{
+            width:11px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("body").mCustomScrollbar();
+
+
+
+        })
+    </script>
+
+
+</head>
+<body data-mcs-theme="minimal-dark">
+
+<nav th:replace="fragment :: menu(5)"></nav>
+<div class="my-content ">
+    <div class="my-container">
+        <div class="my-content_left  animated slideInLeft">
+            <div class="saying my_saying" style="text-align: center;">
+                <p> 恰到好处的喜欢最舒服</p>
+                <p>  你不用多好</p>
+                <p> 我喜欢就好</p>
+                <p>  我没有很好</p>
+                <p>   你不嫌弃就好</p>
+                <div class="author">---LHZ</div>
+            </div>
+            <div class="saying m-text" >
+                <p>有什么就害怕失去它。一无所有，又担心会永远一无所有。每个人都一样</p>
+                <div class="author">---村上春树</div>
+            </div>
+            <div class="saying m-text">
+                <p>于千万人之中遇见你所要遇见的人，于千万年之中，时间的无涯的荒野里，没有早一步，也没有晚一步，刚巧赶上了，那也没有别的话可说，惟有轻轻地问一声：“噢，你也在这里吗？”</p>
+                <div class="author">---张爱玲</div>
+            </div>
+
+
+            <div class="saying m-text">
+                <p>你问我爱你值不值得，其实你应该知道，爱就是不问值得不值得</p>
+                <div class="author">---张爱玲</div>
+            </div>
+            <div class="saying m-text">
+                <p>也许每一个男子全都有过这样的两个女人，至少两个。 娶了红玫瑰，久而久之，红的变了墙上的一抹蚊子血，白的还是“床前明月光”； 娶了白玫瑰，白的便是衣服上的一粒饭粘子，红的却是心口上的一颗朱砂痣</p>
+                <div class="author">---张爱玲</div>
+            </div>
+        </div>
+        <div class="my-content_right  animated slideInRight ">
+            <img src="./images/avatar.jpg" alt="关于我">
+            <div class="main_info">
+                <p> 李华湛，广东人，伪90后，一个不务“正业”的物联网专业学生，大三在读，喜欢Java，主攻后端，前端也略懂复制粘贴的精髓，网页审美水平有限！！！</p>
+
+            </div>
+
+            <div class="hobby">
+                <h3 style="font-weight: 400">爱好</h3>
+                <ul>
+                    <li><p>喜欢听歌，玩吉他</p></li>
+                    <li><p>看电影&电视剧（中日韩美英都可）</p></li>
+                    <li><p>喜欢漫威</p></li>
+                    <li><p>动漫（新海诚，宫崎骏）等等...</p></li>
+                    <li><p>爱编程</p></li>
+                </ul>
+            </div>
+
+            <div class="skill">
+                <h3 style="font-weight: 400">技术栈</h3>
+                <ul>
+                    <li><p>后端：SSM+Springboot</p></li>
+                    <li><p>前端：Html+Css+Js+Jquery</p></li>
+                    <li><p>数据库：Mysql、redis</p></li>
+                    <li><p>其他：Linux基础语法</p></li>
+                </ul>
+            </div>
+
+
+<!--            <p>博客上线历程：第一个目的时巩固知识点，第二就是在阿里云白嫖了服务器不想浪费（doge）,第三希望自己可以在博客写点学习经验</p>-->
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<footer th:replace="fragment :: footer"></footer>
+</body>
+</html>

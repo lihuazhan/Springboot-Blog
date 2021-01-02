@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>LiBlog</title>
+
+</head>
+<body class="index-bg">
+<!--导航栏-->
+<nav th:replace="fragment :: menu(1)"></nav>
+<a href="#" class="mood"><i class="chevron right icon"></i></a>
+<!--通知栏-->
+<div class=" ui container m-padded-tb-medium animated flipInX  ">
+
+    <div class="ui segment scroll-box">
+        <!--        <div class="scroll-box">-->
+        <i class="bullhorn icon" style="float: left;position: relative;bottom: 5px; margin-right: 10px;color: teal"></i>
+        <ul>
+            <li th:each="notice : ${notices}">
+                <span th:text="${notice.getContent()}">好消息！博客终于上线啦！！</span>
+            </li>
+        </ul>
+        <!--        </div>-->
+    </div>
+</div>
+<!--中间内容-->
+<div class="m-padded-tb-tiny  ">
+    <!--    ui container响应式布局-->
+    <div class="ui container">
+        <div class="ui stackable grid ">
+            <!--            左边博客列表-->
+            <div class="eleven wide column animated slideInLeft">
+                <!--                header-->
+                <div class="ui  top attached segment ">
+                    <!--                    垂直居中middle aligned-->
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <h3 class="ui teal header">博客</h3>
+                        </div><!--                            right aligned靠右了-->
+                        <div class="column right aligned">
+                            共 <h3 class="ui orange header m-inline-block" th:text="${pageInfo.total}">3</h3>篇
+                        </div>
+                    </div>
+                </div>
+                <!--                content-->
+
+
+                <div class="ui padded  segment m-shadow" th:each="blog : ${pageInfo.list}"
+                     style="margin-bottom: 1em !important; ">
+                    <!--        stackable可堆叠，适应手机mobile reversed图片放上面（两个column反转）-->
+                    <div class="ui  mobile reversed stackable grid">
+                        <!--                            左图-->
+                        <div class="ui five wide column">
+                            <a href="#" target="_blank">
+                                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank"><img th:src="@{${blog.firstPicture}}" src="https://picsum.photos/seed/picsum/800/450"
+                                                alt="" class="ui rounded image"></a>
+                            </a>
+                            <a href="#" class="ui label orange"
+                               style="position: absolute; right:1.5em; top: 1.5em !important;">原创</a>
+                        </div>
+
+                        <!--                            右，标题+摘录-->
+                        <div class="ui eleven wide column">
+                            <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank"><h3 class="ui header blog_detail"
+                                                                                                   th:text="${blog.title}">
+                                出师表</h3></a>
+                            <p th:text="|${blog.description}......|" class="m-text">
+                                先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听...</p>
+                            <!--                                因为有作者，日期等，又可以用grid-->
+                            <div class="ui grid" style="margin-top: 0">
+
+                                <div class="ui eleven wide column">
+                                    <div class="ui mini horizontal link list ">
+                                        <div class="item">
+                                            <img src="https://picsum.photos/seed/picsum/800/450"
+                                                 th:src="@{${blog.admin.avatar}}" alt="" class="ui avatar image">
+                                            <div class="content teal">
+                                                <a class="header" th:text="${blog.admin.username}">李华湛</a>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="calendar icon"></i><span
+                                                th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2020-3-02</span>
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i><span style="margin-left: 3px !important;"
+                                                                          th:text="${blog.views}"> 暂无浏览</span>
+                                        </div>
+                                        <div class="item">
+                                            <i class="heart  icon"></i><span style="margin-left: 3px !important;"
+                                                                             th:text="${blog.like}"> 暂无点赞</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!--                                    分类,网格内容右对齐-->
+                                <div class="ui right aligned five wide column">
+                                    <a href="#" target="_blank" class="ui teal basic label "
+                                       style="padding: 0.5em !important;" th:each="tag : ${blog.tags}">
+                                        <span th:text="${tag.name}">古诗词</span></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <!--                footer分页-->
+                <div class="ui bottom attached segment center aligned">
+                    <div class="ui middle aligned  grid">
+                        <div class="left aligned seven wide column">
+                            <div class="item"><a class="ui mini teal basic button "
+                                                 th:classappend="${pageInfo.hasPreviousPage}?'':'hide'"
+                                                 th:href="@{/(pageNum=${pageInfo.hasPreviousPage}?${pageInfo.prePage}:1)}">上一页</a>
+                            </div>
+                        </div>
+                        <div class="two wide column">
+                            <span class="" th:text="${pageInfo.getPageNum()}">1</span> / <span
+                                th:text="${pageInfo.getPages()}">3</span>
+                        </div>
+                        <div class="right aligned seven wide column">
+                            <div class="item"><a class="ui mini teal basic button"
+                                                 th:classappend="${pageInfo.hasNextPage}?'':'hide'"
+                                                 th:href="@{/(pageNum=${pageInfo.hasNextPage}?${pageInfo.nextPage}:${pageInfo.pages})}">下一页</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--            右边的top-->
+            <div class="five wide column animated slideInRight">
+                <!--                表示多层segment嵌套-->
+                <div class="ui segments m-info">
+                    <div class="ui secondary segment m-padded-mini" >
+                        <h4 class="ui teal header">博主简介</h4>
+                    </div>
+                    <div class="ui segment m-teal">
+                        <div class="ui  middle aligned grid">
+                            <div class="seven wide column">
+                                <div class="ui centered card" style="width: 11em">
+                                    <img th:src="@{/images/avatar.jpg}" class="ui medium circular image"
+                                         src="../static/images/avatar.jpg">
+                                    <!--                          <img src="../static/images/wechat.jpg"  alt="" class="ui rounded image" >-->
+                                </div>
+                            </div>
+                            <div class="nine wide column">
+
+                                <h4 class="ui header " style="font-weight: 600">Jan</h4>
+                                <p class="m-black "><i class="icon location arrow blue"></i> 广东茂名</p>
+                                <p class="m-black"><i class="icon flag blue"></i> 莫问收获，但问耕耘</p>
+                            </div>
+                        </div>
+
+                        <div class="ui center aligned horizontal container m-margin-top "
+                             style="padding: 1em !important;">
+                            <div class="ui  grid">
+                                <div class="four wide column">
+                                    <div class="ui segment m-segment">
+                                        <a id="weixin" href="#"><i class="fa fa-weixin"></i></a>
+<!--                                        弹出区域-->
+                                        <div class=" ui wexin_qr  popup transition hidden" style="width: 120px; z-index: 999">
+                                                    <img src="../static/images/weChat.jpg"
+                                                         th:src="@{./images/weChat.jpg}" alt="微信"
+                                                         class="ui rounded bordered image"
+                                                         style="width: 120px !important;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="four wide column">
+                                    <div class="ui segment m-segment">
+                                        <a href="#" id="qq"> <i class="fa fa-qq"></i>
+                                        </a>
+                                        <div class=" ui qq_code  popup transition hidden" style="width: 120px; z-index: 999">
+                                            <img src="../static/images/qqCode.jpg"
+                                                 th:src="@{/images/qqCode.jpg}"
+                                                 alt="qq"
+                                                 class="ui rounded bordered image"
+                                                 style="width: 120px !important;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="four wide column">
+                                    <div class="ui segment m-segment">
+                                        <a href=""> <i class="fa fa-weibo"></i></a>
+                                    </div>
+                                </div>
+                                <div class="four wide column">
+                                    <div class="ui segment m-segment">
+                                        <a href=""> <i class="fa fa-github"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segments m-margin-top-large">
+                    <div class="ui secondary segment m-padded-mini " >
+                        <h4 class="ui teal header ">
+                            <!--                            sort amount up-->
+                           热文推荐
+                        </h4>
+
+                    </div>
+
+                    <div class="ui  segment m-padded-tb-small" style="border: none" th:each="lankblogs,stat: ${lankBlogs}">
+                        <!--                        <div class="ui two column grid">-->
+                        <div class="column">
+                            <label href="" class="ui label " style="margin-right: 1.5em;"
+                                   th:classappend="${(stat.index+1)==1}?'red':(${(stat.index+1)==2}?'orange':(${(stat.index+1)==3}?'pink'))">
+                                <span th:text="${stat.index+1}">1</span>
+                            </label>
+                            <a href="#" th:href="@{/blog/{id}(id=${lankblogs.getId()})}" class="m-black m-text-thin lankBlog_detail " th:text="${lankblogs.getTitle()}">人间失格</a>
+<!--                            <div class="item " style="color: #FF69B4 ;float: right"><i class="fa fa-heart"></i> 2000</div>-->
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="ui segments m-margin-top-large">
+                    <div class="ui secondary segment m-padded-mini" >
+                        <div class="ui two column grid">
+                            <div class="column">
+
+                                <h4 class="ui header teal"></i>标签</h4>
+                            </div>
+                            <div class="right aligned column ">
+                                <a href="#" style="color: #00B5AD" target="_blank">more <i class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    segment之间加一条线-->
+                    <div class="ui  segment">
+                        <!--                            left pointing左边突角的label  basic中间颜色挖空-->
+                        <!--                        <a href="#" th:href="@{/tags/{id}(id=${tag.getId()})}" target="_blank"class="ui teal  basic label m-margin-tb-tiny" th:each="tag : ${tags}" ><span th:text="${tag.name}">redis</span>   </a>-->
+                        <div class="ui labeled button m-margin-tb-tiny teal " th:each="tag : ${tags}">
+                            <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" class="ui basic   teal button"
+                               th:text="${tag.name}">弹吉他</a>
+                            <div class="ui basic teal left pointing label" t th:text="${#arrays.length(tag.blogs)}">19
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="ui horizontal divider header m-margin-top-large">留言板</h4>
+
+                <div class="ui segment message-board">
+
+                    <ul>
+                        <li th:each="message : ${messages}">
+                            <div>
+                                <span class="name " th:text="${message.getNickName()}">尼古拉斯 ：</span>
+                                <!--                                截取留言的前九个字符-->
+                                <a href="#" th:href="@{/message/allMessage}"> <span class="con m-text" th:text="${message.getContent()}">测试留言板的的的的...</span></a>
+                                <span class="date" th:text="${#dates.format(message.getCreate_time(), 'MM-dd')}">2020-8-17</span>
+                            </div>
+                        </li>
+<!--                        <li>-->
+<!--                            <div>-->
+<!--                                <span class="name">放下 ：</span>-->
+<!--                                <a href="#" class="m-text"> <span class="con">测试留言板</span></a>-->
+<!--                                <span class="date">2020-8-17</span>-->
+<!--                            </div>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <div>-->
+<!--                                <span class="name">赵四 ：</span>-->
+<!--                                <a href="#"> <span class="con m-text">测试留言板</span></a>-->
+<!--                                <span class="date">2020-8-17</span>-->
+<!--                            </div>-->
+<!--                        </li>-->
+                    </ul>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<!--脚部-->
+<footer th:replace="fragment :: footer"></footer>
+
+<script>
+
+    $(".menu.toggle").click(function () {
+        $(".m-item").toggleClass("m-mobile-hide");
+    })
+    // 悬停的时候下拉
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    })
+
+    $('#weixin').popup({
+        popup: $('.wexin_qr.popup'),
+        on: 'click',
+        position: 'bottom center'
+    });
+    $('#qq').popup({
+        popup: $('.qq_code.popup'),
+        on: 'click',
+        position: 'bottom center'
+    });
+
+    // 侧边栏
+    $('.mood').click(function () {
+        $('.mymood').animate({width: 'toggle'}, 350);
+        var $i= $(this).find("i");
+        if ($i.hasClass("left")) {
+            $i.removeClass("left");
+            $i.addClass("right");
+        }else {
+            $i.removeClass("right");
+            $i.addClass("left");
+        }
+    })
+    //通知栏
+    $(function() {
+        //获得当前<ul>
+        var $uList = $(".scroll-box ul");
+        var timer = null;
+        //触摸清空定时器
+        $uList.hover(function() {
+                clearInterval(timer);
+            },
+            function() { //离开启动定时器
+                timer = setInterval(function() {
+                        scrollList($uList);
+                    },
+                    4000);
+            }).trigger("mouseleave"); //自动触发触摸事件
+        //滚动动画
+        function scrollList(obj) {
+            //获得当前<li>的高度
+            var scrollHeight = $("ul li:first").height();
+            //滚动出一个<li>的高度
+            $uList.stop().animate({
+                    marginTop: -scrollHeight
+                },
+                600,
+                function() {
+                    //动画结束后，将当前<ul>marginTop置为初始值0状态，再将第一个<li>拼接到末尾。
+                    $uList.css({
+                        marginTop: 0
+                    }).find("li:first").appendTo($uList);
+                });
+        }
+    });
+</script>
+</body>
+</html>

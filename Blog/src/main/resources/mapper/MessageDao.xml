@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.MessageDao">
+
+
+
+    <resultMap id="messages" type="message">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="nickName" column="nickname"/>
+        <result property="msg_avatar" column="msg_avatar"/>
+        <result property="create_time" column="create_time"/>
+        <result property="admin" column="admin"/>
+        <collection property="replies" ofType="reply">
+            <id property="id" column="rid"/>
+            <result property="content" column="con"/>
+            <result property="reply_name" column="reply_name"/>
+            <result property="nickName" column="nick"/>
+            <result property="create_time" column="ctime"/>
+            <result property="avatar" column="avatar"/>
+            <result property="mes_id" column="mes_id"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="findAllMessage" resultMap="messages">
+           select m.*,
+           r.id rid,
+        r.content con,
+        r.nickname nick,
+        r.create_time ctime,
+        r.reply_name,
+        r.avatar,
+        r.mes_id
+         from message m left join reply r on r.mes_id=m.id
+           order by m.create_time desc
+    </select>
+    <select id="getIndexMessage" resultMap="messages">
+           select m.*
+            from message m
+            order by m.create_time desc
+            limit 0,6
+
+
+
+
+    </select>
+
+    <insert id="saveMessage" parameterType="message">
+        insert into message (content,nickname,create_time,msg_avatar)
+        values (#{content},#{nickName},#{create_time},#{msg_avatar})
+    </insert>
+
+    <insert id="saveReplyMessage" parameterType="reply">
+        insert into reply (content,nickname,create_time,reply_name,mes_id,avatar)
+        values (#{content},#{nickName},#{create_time},#{reply_name},#{mes_id},#{avatar})
+    </insert>
+
+</mapper>
