@@ -1,4 +1,4 @@
-# 预览地址 http://www.liweb.top/
+# 预览地址 http://www.liweb.top/      
 
 # 关于项目
 首先，整个项目是参考B站李仁密老师的开发教程（https://www.bilibili.com/video/BV1nE411r7TF）。<br/>
@@ -18,4 +18,3 @@ SpringBoot+MyBatis进行开发，对原版数据库都进行了一定的改动�
 1、留言功能的数据库表设计其实是存在一定缺陷的
 2、把原来密码Md5加密取消了（ps:为了自己在数据库更好的观察）
 
-# 右上角star
