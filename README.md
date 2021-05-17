@@ -1,7 +1,7 @@
 # 预览地址 http://www.liweb.top/      （服务器到期了！！）
 
 # 关于项目
-首先，整个项目是参考B站李仁密老师的开发教程（https://www.bilibili.com/video/BV1nE411r7TF）。<br/>
+首先，整个项目是参考B站李仁密老师的开发教程（https://www.bilibili.com/video/BV1nE411r7TF?from=search&seid=276843777910715448）。<br/>
 对整个项目的前端包括后端的某些地方进行了更改，算是对自己的学习总结的一个小里程碑了，也希望大家从中得到借鉴的地方！！
 
 # 前端部分
